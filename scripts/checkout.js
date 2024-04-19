@@ -4,6 +4,9 @@ import {formatCurrency} from './utils/money.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import {deliveryOptions} from '../data/deliveryoptions.js'
 
+
+function renderOrderSummary() {
+
 let cartSummaryHTML = '';
 
 cart.forEach((cartItem) => {
@@ -154,7 +157,7 @@ document.querySelectorAll('.js-update-link').forEach((link) => {
 
 document.querySelectorAll('.js-save-quantity-link').forEach((link) => {
   link.addEventListener('click', () => {
-    const productId = link.dataset.productId;
+    const {productId} = link.dataset;
     const newQuantity = parseInt(document.querySelector(`.js-quantity-input-${productId}`).value);
     if(newQuantity < 0 || newQuantity > 1000){
       alert('Quantity must be atleast 0 and less than 1000');
@@ -169,7 +172,7 @@ document.querySelectorAll('.js-save-quantity-link').forEach((link) => {
 
 document.querySelectorAll('.js-delete-link').forEach((link) => {
   link.addEventListener('click', () => {
-    const productId = link.dataset.productId;
+    const {productId} = link.dataset;
     removeFromCart(productId);
     const container = document.querySelector(`.js-cart-item-container-${productId}`);
     container.remove();
@@ -190,7 +193,11 @@ document.querySelectorAll('.js-delivery-option').forEach((element) => {
 
   const {productId, deliveryOptionId} = element.dataset;
   updateDeliveryOption(productId, deliveryOptionId);
-  
+
+  renderOrderSummary(); 
  });
 });
 
+};
+
+renderOrderSummary();
