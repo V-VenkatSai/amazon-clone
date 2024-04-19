@@ -52,7 +52,7 @@ cartSummaryHTML += `
                       <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchingProduct.id}">
                         Update
                       </span>
-                      <input class="quantity-input js-quantity-input-${matchingProduct.id}" type="number" value="${checkCartItemQuantity(matchingProduct.id)}">
+                      <input class="quantity-input js-quantity-input-${matchingProduct.id}" type="number" value="${cartItem.quantity}">
                       <span class="save-quantity-link link-primary js-save-quantity-link" data-product-id="${matchingProduct.id}">Save</span>
                       <span  class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingProduct.id}">
                         Delete
@@ -70,19 +70,6 @@ cartSummaryHTML += `
               </div>
 `;
 });
-
-
- function checkCartItemQuantity(productId){
-
-  let itemQuantity;
-
-  cart.forEach((cartItem) => {
-    console.log(cart);
-     if(cartItem.id === productId){
-      console.log(cartItem.quantity);
-     }
-  });
-};
 
 function deliveryOptionsHTML(matchingProduct, cartItem) {
 
@@ -138,26 +125,38 @@ document.querySelectorAll('.js-update-link').forEach((link) => {
 
 document.querySelectorAll('.js-save-quantity-link').forEach((link) => {
   link.addEventListener('click', () => {
+
     const {productId} = link.dataset;
     const newQuantity = parseInt(document.querySelector(`.js-quantity-input-${productId}`).value);
+
     if(newQuantity < 0 || newQuantity > 1000){
       alert('Quantity must be atleast 0 and less than 1000');
       return;
     };
+
     updateQuantity(productId, newQuantity);
     document.querySelector(`.js-cart-item-container-${productId}`).classList.remove('is-editing-quantity');
     document.querySelector(`.js-quantity-label-${productId}`).innerHTML = newQuantity;
+
     updateCheckoutCartQuantity();
+    renderPaymentSummary();
+    
   });
 });
 
 document.querySelectorAll('.js-delete-link').forEach((link) => {
   link.addEventListener('click', () => {
+
     const {productId} = link.dataset;
     removeFromCart(productId);
+
     const container = document.querySelector(`.js-cart-item-container-${productId}`);
+
     container.remove();
+
     updateCheckoutCartQuantity();
+    renderPaymentSummary();
+
   });
 });
 
