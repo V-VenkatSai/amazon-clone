@@ -27,11 +27,9 @@ class Cart {
       }
     });
 
-    // const quantity = parseInt(
-    //   document.querySelector(`.js-product-quantity-${productId}`).value
-    // );
-
-    const quantity = 1;
+    const quantity = parseInt(
+      document.querySelector(`.js-product-quantity-${productId}`).value
+    );
 
     if (matchingItem) {
       matchingItem.quantity += quantity;
@@ -95,8 +93,4 @@ class Cart {
   }
 }
 
-const cart = new Cart("cart-oop");
-const businessCart = new Cart("cart-business");
-
-console.log(cart);
-console.log(businessCart);
+export const cart = new Cart('cart');
