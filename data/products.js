@@ -56,6 +56,25 @@ class Clothing extends Products {
   }
 }
 
+class Appliance extends Products {
+  instructionsLink;
+  warrantyLink;
+
+  constructor(productDetails) {
+    super(productDetails);
+    this.instructionsLink = productDetails.instructionsLink;
+    this.warrantyLink = productDetails.warrantyLink;
+  }
+
+  extraInfoHTML() {
+    //super.extraInfoHTML();
+    return `
+      <a href="${this.instructionsLink}" target="_blank">Instructions</a>
+      <a href="${this.warrantyLink}" target="_blank">Warranty</a>
+    `;
+  }
+}
+
 // const date = new Date();
 // console.log(date);
 // console.log(date.toLocaleTimeString());
@@ -78,15 +97,13 @@ logThis();
 logThis.call('hello');
 
 const object3 = {
-  method : () => {
+  method : () => { 
     console.log(this);
   }
 };
 
 object3.method();
 */
-
-
 
 export const products = [
   {
@@ -134,6 +151,9 @@ export const products = [
     },
     priceCents: 1899,
     keywords: ["toaster", "kitchen", "appliances"],
+    type: "appliance",
+    instructionsLink: "images/appliance-instructions.png",
+    warrantyLink: "images/appliance-warranty.png",
   },
   {
     id: "3ebe75dc-64d2-4137-8860-1f5a963e534b",
@@ -268,6 +288,9 @@ export const products = [
     },
     priceCents: 3074,
     keywords: ["water boiler", "appliances", "kitchen"],
+    type: "appliance",
+    instructionsLink: "images/appliance-instructions.png",
+    warrantyLink: "images/appliance-warranty.png",
   },
   {
     id: "6b07d4e7-f540-454e-8a1e-363f25dbae7d",
@@ -525,6 +548,9 @@ export const products = [
     },
     priceCents: 10747,
     keywords: ["food blenders", "kitchen", "appliances"],
+    type: "appliance",
+    instructionsLink: "images/appliance-instructions.png",
+    warrantyLink: "images/appliance-warranty.png",
   },
   {
     id: "36c64692-677f-4f58-b5ec-0dc2cf109e27",
@@ -582,6 +608,8 @@ export const products = [
 ].map((productDetails) => {
   if (productDetails.type === "clothing") {
     return new Clothing(productDetails);
+  } else if (productDetails.type === "appliance") {
+    return new Appliance(productDetails);
   }
 
   return new Products(productDetails);
