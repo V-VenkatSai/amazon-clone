@@ -112,12 +112,18 @@ export function loadProducts(fun) {
   const xhr = new XMLHttpRequest();
 
   xhr.addEventListener('load', () => {
+
     products = JSON.parse(xhr.response).map((productDetails) => {
 
         if (productDetails.type === "clothing") {
+
           return new Clothing(productDetails);
-        } else if (productDetails.type === "appliance") {
+
+        }
+         else if (productDetails.type === "appliance") {
+
           return new Appliance(productDetails);
+          
         }
       
         return new Products(productDetails);
