@@ -225,3 +225,15 @@
 .is-editing-quantity .quantity-label, .is-editing-quantity .update-quantity-link{
   display: none;
 }
+
+.payment-summary .payment-buttons-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.view-products-link {
+  display: inline-block;
+  padding: 8px 15px;
+  text-decoration: none;
+  margin-top: 10px;
+}

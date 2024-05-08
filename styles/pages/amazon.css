@@ -158,3 +158,8 @@
   padding: 8px;
   border-radius: 50px;
 }
+
+.empty-results-message{
+  width:100%;
+  padding:10px;
+}

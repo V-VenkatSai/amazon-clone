@@ -1,14 +1,33 @@
-//import {cart, addToCart, calculateCartQuantity} from '../data/cart.js';
 import { cart } from "../data/cart-class.js";
-import { products, loadProducts } from "../data/products.js";
-import { formatCurrency } from "./utils/money.js";
+import { loadProductsList, search } from "../data/products.js";
+import { renderHeaderSummary } from "./shared/header.js";
 
-loadProducts(renderProductsGrid);
+renderHeaderSummary();
+async function loadPage() {
+  await loadProductsList();
+  renderProductsGrid();
+}
+
+loadPage();
 
 function renderProductsGrid() {
+  const url = new URL(window.location.href);
+  const searchText = url.searchParams.get("search");
+  const searchResults = search(searchText);
+
+  if (searchResults.length === 0) {
+    document.querySelector(".js-products-grid").innerHTML = `
+        <div class="empty-results-message"
+          data-testid="empty-results-message">
+          No products matched your search.
+        </div>
+      `;
+    return;
+  }
+
   let productsHTML = "";
 
-  products.forEach((product) => {
+  searchResults.forEach((product) => {
     productsHTML += `
   <div class="product-container">
           <div class="product-image-container">
@@ -33,7 +52,7 @@ function renderProductsGrid() {
           </div>
 
           <div class="product-quantity-container">
-            <select class="js-product-quantity-${product.id}">
+            <select class="js-product-quantity-${product.id}">1
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -69,8 +88,8 @@ function renderProductsGrid() {
   const addedMssgTimeOuts = {};
   function updateCartQuantity() {
     const cartQuantity = cart.calculateCartQuantity();
-
     document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+    document.querySelector(".js-cart-quantity-mobile").innerHTML = cartQuantity;
   }
 
   function displayAddedMessage(productId) {
@@ -92,8 +111,6 @@ function renderProductsGrid() {
       addedMssgTimeOuts[productId] = timeOutId;
     });
   }
-
-  updateCartQuantity();
 
   document.querySelectorAll(".js-add-to-cart").forEach((button) => {
     button.addEventListener("click", () => {

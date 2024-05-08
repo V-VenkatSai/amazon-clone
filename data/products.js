@@ -18,6 +18,7 @@ class Products {
   name;
   rating;
   priceCents;
+  keywords;
 
   constructor(productDetails) {
     this.id = productDetails.id;
@@ -25,6 +26,7 @@ class Products {
     this.name = productDetails.name;
     this.rating = productDetails.rating;
     this.priceCents = productDetails.priceCents;
+    this.keywords = productDetails.keywords;
   }
 
   getStarsURL() {
@@ -75,88 +77,47 @@ class Appliance extends Products {
   }
 }
 
-// const date = new Date();
-// console.log(date);
-// console.log(date.toLocaleTimeString());
-
-/*
-console.log(this);
-
-const object1 = {
-  a:1,
-  b:this.a
-};
-*/
-
-/* 
-function logThis(){
-  console.log(this);
-}
-
-logThis();
-logThis.call('hello');
-
-const object3 = {
-  method : () => { 
-    console.log(this);
-  }
-};
-
-object3.method();
-*/
-
 export let products = [];
-
-export function loadProductsFetch() {
-  const promise = fetch("https://supersimplebackend.dev/products")
-    .then((response) => {
-      return response.json();
-    })
-    .then((productsData) => {
-      products = productsData.map((productDetails) => {
-        if (productDetails.type === "clothing") {
-          return new Clothing(productDetails);
-        } else if (productDetails.type === "appliance") {
-          return new Appliance(productDetails);
-        }
-
-        return new Products(productDetails);
-      });
-    }).catch((error) => {
-      console.log('unexpected error. please try again later..');
-    });
-  return promise;
-}
-
-// loadProductsFetch().then(() => {
-//   console.log('Next Step');
-// });
-export function loadProducts(fun) {
-  const xhr = new XMLHttpRequest();
-
-  xhr.addEventListener('load', () => {
-    products = JSON.parse(xhr.response).map((productDetails) => {
+export async function loadProductsList() {
+  try {
+    const response = await fetch("https://supersimplebackend.dev/products");
+    const productData = await response.json();
+    products = productData.map((productDetails) => {
       if (productDetails.type === "clothing") {
         return new Clothing(productDetails);
       } else if (productDetails.type === "appliance") {
         return new Appliance(productDetails);
+      } else {
+        return new Products(productDetails);
       }
+    });
+  } catch {
+    console.log("unexpected error. please try again later..");
+  }
+  return products;
+}
 
-      return new Products(productDetails);
+export function search(searchText) {
+  if (!searchText) {
+    return products;
+  }
+
+  return products.filter((item) => {
+    const nameCheck = item.name
+      .toLowerCase()
+      .includes(searchText.toLowerCase());
+    console.log(nameCheck);
+    if (nameCheck) {
+      return true;
+    }
+
+    const keywordCheck = item.keywords.find((keyword) => {
+      return keyword.toLowerCase().includes(searchText.toLowerCase());
     });
 
-    fun();
+    return !!keywordCheck;
   });
-
-  xhr.addEventListener('error', (error) => {
-    console.log('unexpected error. please try again later..');
-  });
-
-  xhr.open("GET", "https://supersimplebackend.dev/products");
-  xhr.send();
-
-};
-
+}
 
 // export const products = [
 //   {

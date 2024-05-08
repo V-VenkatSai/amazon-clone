@@ -1,7 +1,6 @@
-import {cart} from '../../data/cart-class.js';
+import { cart } from "../../data/cart-class.js";
 
 export function renderCheckoutHeader() {
-
   let cartQuantity = 0;
 
   cart.cartItems.forEach((cartItem) => {
@@ -28,7 +27,5 @@ export function renderCheckoutHeader() {
 
   `;
 
-  document.querySelector('.js-checkout-header')
-    .innerHTML = checkoutHeaderHTML;
-
+  document.querySelector(".js-checkout-header").innerHTML = checkoutHeaderHTML;
 }
