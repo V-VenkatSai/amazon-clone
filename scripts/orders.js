@@ -65,9 +65,9 @@ function orderRenderSummary() {
     <div class="product-quantity">
       Quantity: ${orderItem.quantity}
     </div>
-    <button class="buy-again-button button-primary js-button-primary" data-product-id = ${
+    <button class="buy-again-button button-primary js-button-primary js-button-primary-${
       orderItem.productId
-    }>
+    }" data-product-id = ${orderItem.productId}>
       <img class="buy-again-icon" src="images/icons/buy-again.png">
       <span class="buy-again-message">Buy it again</span>
     </button>
@@ -90,9 +90,30 @@ function orderRenderSummary() {
     return orderItems;
   }
 
+  const addedMssgTimeOuts = {};
+
   document.querySelectorAll(".js-button-primary").forEach((button) => {
     button.addEventListener("click", () => {
       const { productId } = button.dataset;
+      document.querySelector(`.js-button-primary-${productId}`).innerHTML = `
+      <span class="buy-again-message">&#10003; Added</span>
+      `;
+      setTimeout(() => {
+        if (addedMssgTimeOuts[productId]) {
+          clearTimeout(addedMssgTimeOuts[productId]);
+        }
+
+        const timeOutId = setTimeout(() => {
+          document.querySelector(
+            `.js-button-primary-${productId}`
+          ).innerHTML = `
+        <img class="buy-again-icon" src="images/icons/buy-again.png">
+        <span class="buy-again-message">Buy it again</span>
+        `;
+        }, 1500);
+
+        addedMssgTimeOuts[productId] = timeOutId;
+      });
       cart.addToCart(productId);
       updateCartQuantity();
     });
