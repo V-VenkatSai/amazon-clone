@@ -15,9 +15,19 @@ loadOrderPage();
 
 function orderRenderSummary() {
   let renderHTML = "";
-
-  orders.forEach((orderList) => {
-    renderHTML += `<div class="order-container">
+  if (orders.length === 0) {
+    document.querySelector(".js-orders-grid").innerHTML = `
+    <div>
+There are no orders.<br>
+<a class="button-primary view-products-link" href="." data-testid="view-products-link">
+      View products
+</a>
+</div>
+`;
+    return;
+  } else {
+    orders.forEach((orderList) => {
+      renderHTML += `<div class="order-container">
     <div class="order-header">
     <div class="order-header-left-section">
       <div class="order-date">
@@ -37,8 +47,8 @@ function orderRenderSummary() {
     </div>
     ${orderItems(orderList.products, orderList)}
     </div>`;
-  });
-
+    });
+  }
   document.querySelector(".js-orders-grid").innerHTML = renderHTML;
   function orderItems(orderItemsList, orderList) {
     let orderItems = "";
