@@ -105,7 +105,8 @@ There are no orders.<br>
   document.querySelectorAll(".js-button-primary").forEach((button) => {
     button.addEventListener("click", () => {
       const { productId } = button.dataset;
-      document.querySelector(`.js-button-primary-${productId}`).innerHTML = `
+      const query = document.querySelector(`.js-button-primary-${productId}`);
+      query.innerHTML = `
       <span class="buy-again-message">&#10003; Added</span>
       `;
       setTimeout(() => {
@@ -114,9 +115,7 @@ There are no orders.<br>
         }
 
         const timeOutId = setTimeout(() => {
-          document.querySelector(
-            `.js-button-primary-${productId}`
-          ).innerHTML = `
+          query.innerHTML = `
         <img class="buy-again-icon" src="images/icons/buy-again.png">
         <span class="buy-again-message">Buy it again</span>
         `;
