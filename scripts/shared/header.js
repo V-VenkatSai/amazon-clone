@@ -58,8 +58,10 @@ export function renderHeaderSummary() {
       }
     });
 
-  inputBarEvent.addEventListener("Enter", () => {
+  inputBarEvent.addEventListener("keydown", (event) => {
+    if(event.key == 'Enter'){
     searchValue(inputBarEvent.value);
+    }
   });
 
   document.querySelector(".js-search-button").addEventListener("click", () => {
